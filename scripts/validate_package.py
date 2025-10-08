@@ -100,8 +100,11 @@ if __name__ == "__main__":
     
     # Install required tools if missing
     try:
-        subprocess.run(["python", "-m", "pip", "install", "build", "twine", "pytest", "ruff", "mypy"], 
-                      check=True, capture_output=True)
+        subprocess.run(
+            ["python", "-m", "pip", "install",
+             "build", "twine", "pytest", "ruff", "mypy", "pip-audit"],
+            check=True, capture_output=True,
+        )
     except subprocess.CalledProcessError:
         print("⚠️  Could not install all validation tools. Some checks may fail.")
     

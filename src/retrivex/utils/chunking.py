@@ -165,23 +165,36 @@ class SentenceChunker:
         chunk_id = 0
         i = 0
 
+        # Precompute sentence spans to get accurate character offsets
+        sentence_spans = []
+        cursor = 0
+        for sentence in sentences:
+            idx = text.find(sentence, cursor)
+            if idx == -1:
+                idx = cursor
+            start_idx = idx
+            end_idx = start_idx + len(sentence)
+            sentence_spans.append((sentence, start_idx, end_idx))
+            cursor = end_idx
+
+        chunks = []
+        chunk_id = 0
+        i = 0
+
         while i < len(sentences):
             # Take sentences_per_chunk sentences
             end = min(i + self.sentences_per_chunk, len(sentences))
-            chunk_sentences = sentences[i:end]
-
-            chunk_text = " ".join(chunk_sentences).strip()
+            window = sentence_spans[i:end]
+            chunk_start = window[0][1]
+            chunk_end = window[-1][2]
+            chunk_text = text[chunk_start:chunk_end]
 
             if chunk_text:
-                # Find character positions
-                char_start = text.find(chunk_sentences[0])
-                char_end = char_start + len(chunk_text)
-
                 metadata = ChunkMetadata(
                     doc_id=doc_id,
                     chunk_id=chunk_id,
-                    char_start=max(0, char_start),
-                    char_end=char_end,
+                    char_start=chunk_start,
+                    char_end=chunk_end,
                     parent_id=parent_id,
                     heading_path=heading_path,
                 )
@@ -193,7 +206,6 @@ class SentenceChunker:
             i += self.sentences_per_chunk - self.overlap_sentences
             if i <= 0 or end >= len(sentences):
                 break
-
         return chunks
 
     def _split_sentences(self, text: str) -> List[str]:

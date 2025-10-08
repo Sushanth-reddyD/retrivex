@@ -73,7 +73,6 @@ class TestSpanComposer:
     def test_span_scoring(self, composer, sample_chunks):
         """Test span scoring."""
         # Create a simple span
-        chunks = [sample_chunks[("doc1", i)] for i in [5, 6, 7]]
         span = composer._create_span("doc1", [5, 6, 7], sample_chunks)
 
         # Create seed hit

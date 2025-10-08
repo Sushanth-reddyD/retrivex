@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from .models import Chunk, ChunkMetadata, RetrievalConfig, SeedHit, Span
+from .models import Chunk, RetrievalConfig, SeedHit, Span
 
 
 class SpanComposer:

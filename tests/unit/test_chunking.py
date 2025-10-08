@@ -1,7 +1,5 @@
 """Unit tests for chunking utilities."""
 
-import pytest
-
 from retrivex.utils.chunking import SentenceChunker, SimpleChunker
 
 

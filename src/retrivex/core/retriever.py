@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 import numpy as np
 
-from .models import Chunk, RetrievalConfig, SeedHit, Span
+from .models import Chunk, OrderingStrategy, RetrievalConfig, SeedHit, Span
 
 
 class SpanComposer:
@@ -357,11 +357,11 @@ class SpanComposer:
 
         strategy = self.config.ordering_strategy
 
-        if strategy == "score_desc":
+        if strategy == OrderingStrategy.SCORE_DESC:
             return sorted(spans, key=lambda s: s.score, reverse=True)
-        elif strategy == "front_first":
+        elif strategy == OrderingStrategy.FRONT_FIRST:
             return spans  # Already in order
-        elif strategy == "back_first":
+        elif strategy == OrderingStrategy.BACK_FIRST:
             return list(reversed(spans))
         else:  # edge_balanced (default)
             return self._edge_balanced_ordering(spans)

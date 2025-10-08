@@ -12,6 +12,9 @@ from retrivex import (
 )
 from retrivex.utils import SimpleChunker
 
+# Test constants
+BUDGET_TOLERANCE = 2.0  # Allow up to 2x budget in edge cases
+
 
 class TestEndToEndRetrieval:
     """Integration tests for complete retrieval pipeline."""
@@ -169,7 +172,9 @@ class TestEndToEndRetrieval:
         # If more than one span, most should fit in budget
         if len(spans) > 1:
             # Budget should limit the number of spans
-            assert total_tokens < config.token_budget * 2, "Should not wildly exceed budget"
+            assert (
+                total_tokens < config.token_budget * BUDGET_TOLERANCE
+            ), "Should not wildly exceed budget"
 
     def test_heading_boundary_detection(self):
         """Test that heading boundaries affect expansion."""

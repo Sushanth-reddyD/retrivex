@@ -1,5 +1,6 @@
 """Chunking utilities following §2 requirements."""
 
+import re
 from typing import List, Optional
 
 from ..core.models import Chunk, ChunkMetadata
@@ -215,8 +216,6 @@ class SentenceChunker:
         Can be enhanced with nltk.sent_tokenize or spaCy.
         """
         # Simple rule-based splitting
-        import re
-
         # Split on sentence boundaries
         sentences = re.split(r"(?<=[.!?])\s+", text)
 

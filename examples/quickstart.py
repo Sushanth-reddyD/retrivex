@@ -4,6 +4,8 @@ Quick Start Example for RetriVex
 This example demonstrates the basic usage of RetriVex for neighbor-expansion retrieval.
 """
 
+import hashlib
+
 import numpy as np
 
 from retrivex import (
@@ -59,8 +61,9 @@ def create_sample_document():
 
 def create_simple_embeddings(text: str, dim: int = 10) -> list:
     """Create simple embeddings for demonstration (not production-ready)."""
-    # Simple hash-based embedding for demo purposes
-    np.random.seed(hash(text) % (2**32))
+    # Use deterministic SHA-256 hash for reproducibility across processes
+    seed = int.from_bytes(hashlib.sha256(text.encode("utf-8")).digest()[:4], "big")
+    np.random.seed(seed)
     embedding = np.random.rand(dim).tolist()
     return embedding
 

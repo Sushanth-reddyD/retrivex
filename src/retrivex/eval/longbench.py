@@ -5,6 +5,7 @@ This module implements evaluation against LongBench datasets, focusing on
 multi-task long-context QA where answers often straddle chunk boundaries.
 """
 
+import hashlib
 import json
 import random
 from pathlib import Path
@@ -359,8 +360,9 @@ class LongBenchEvaluator(BaseEvaluator):
 
     def _create_embedding(self, text: str) -> List[float]:
         """Create a simulated embedding for text."""
-        # Simple hash-based embedding for demo
-        np.random.seed(hash(text) % (2**32))
+        # Use deterministic SHA-256 hash for reproducibility across processes
+        seed = int.from_bytes(hashlib.sha256(text.encode("utf-8")).digest()[:4], "big")
+        np.random.seed(seed)
         embedding = np.random.rand(self.embedding_dim).tolist()
         return embedding
 
@@ -384,7 +386,11 @@ class LongBenchEvaluator(BaseEvaluator):
                 similarity = len(intersection) / len(union)  # Jaccard similarity
 
             # Add some randomness to simulate embedding similarity
-            np.random.seed(hash(chunk.text + query) % (2**32))
+            combined_text = chunk.text + query
+            seed = int.from_bytes(
+                hashlib.sha256(combined_text.encode("utf-8")).digest()[:4], "big"
+            )
+            np.random.seed(seed)
             noise = np.random.normal(0, 0.1)
             similarity = max(0.0, min(1.0, similarity + noise))
 

@@ -5,6 +5,7 @@ This module implements evaluation against RULER benchmark - a synthetic but cont
 benchmark for testing long-context capabilities with variable needle position and length.
 """
 
+import hashlib
 import random
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -557,8 +558,9 @@ class RULEREvaluator(BaseEvaluator):
 
     def _create_embedding(self, text: str) -> List[float]:
         """Create a simulated embedding for text."""
-        # Simple hash-based embedding for demo
-        np.random.seed(hash(text) % (2**32))
+        # Use deterministic SHA-256 hash for reproducibility across processes
+        seed = int.from_bytes(hashlib.sha256(text.encode("utf-8")).digest()[:4], "big")
+        np.random.seed(seed)
         embedding = np.random.rand(self.embedding_dim).tolist()
         return embedding
 
@@ -582,7 +584,11 @@ class RULEREvaluator(BaseEvaluator):
                 similarity = len(intersection) / len(union)  # Jaccard similarity
 
             # Add randomness to simulate embedding similarity
-            np.random.seed(hash(chunk.text + query) % (2**32))
+            combined_text = chunk.text + query
+            seed = int.from_bytes(
+                hashlib.sha256(combined_text.encode("utf-8")).digest()[:4], "big"
+            )
+            np.random.seed(seed)
             noise = np.random.normal(0, 0.05)  # Less noise for more realistic similarity
             similarity = max(0.0, min(1.0, similarity + noise))
 

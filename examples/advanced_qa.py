@@ -5,6 +5,8 @@ This example demonstrates a more realistic use case with multiple documents,
 proper embeddings (simulated), and a complete Q&A pipeline.
 """
 
+import hashlib
+
 import numpy as np
 from typing import Dict, List, Tuple
 
@@ -139,8 +141,11 @@ def create_embedding(text: str, seed: int = 42) -> List[float]:
 
     In production, use a real embedding model like OpenAI, Cohere, or HuggingFace.
     """
-    # Simple hash-based embedding for demo
-    np.random.seed(hash(text) % (2**32 - seed))
+    # Use deterministic SHA-256 hash for reproducibility across processes
+    # Mix in the seed to vary embeddings slightly
+    combined = f"{text}_{seed}"
+    hash_seed = int.from_bytes(hashlib.sha256(combined.encode("utf-8")).digest()[:4], "big")
+    np.random.seed(hash_seed)
     embedding = np.random.rand(128).tolist()
     return embedding
 

@@ -6,6 +6,7 @@ NIAH is designed to test whether models can find specific information placed
 at different positions within long contexts.
 """
 
+import hashlib
 import random
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -360,8 +361,9 @@ class NIAHEvaluator(BaseEvaluator):
 
     def _create_embedding(self, text: str) -> List[float]:
         """Create a simulated embedding for text."""
-        # Simple hash-based embedding for demo
-        np.random.seed(hash(text) % (2**32))
+        # Use deterministic SHA-256 hash for reproducibility across processes
+        seed = int.from_bytes(hashlib.sha256(text.encode("utf-8")).digest()[:4], "big")
+        np.random.seed(seed)
         embedding = np.random.rand(self.embedding_dim).tolist()
         return embedding
 
@@ -392,7 +394,11 @@ class NIAHEvaluator(BaseEvaluator):
                         similarity += 0.2  # Boost for bigram match
 
             # Add controlled randomness
-            np.random.seed(hash(chunk.text + query) % (2**32))
+            combined_text = chunk.text + query
+            seed = int.from_bytes(
+                hashlib.sha256(combined_text.encode("utf-8")).digest()[:4], "big"
+            )
+            np.random.seed(seed)
             noise = np.random.normal(0, 0.03)  # Small noise
             similarity = max(0.0, min(1.0, similarity + noise))
 

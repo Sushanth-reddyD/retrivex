@@ -27,7 +27,7 @@ RetriVex addresses this through:
 ### Installation
 
 ```bash
-pip install retrivex
+pip install retrivexlib
 ```
 
 ### Basic Usage
@@ -308,8 +308,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 If you use RetriVex in your research, please cite:
 
 ```bibtex
-@software{retrivex2024,
-  title = {RetriVex: Neighbor-Expansion Retriever for Long-Context LLMs},
+@software{retrivexlib2024,
+  title = {RetriVexLib: Neighbor-Expansion Retriever for Long-Context LLMs},
   author = {Sushanth Reddy},
   year = {2024},
   url = {https://github.com/Sushanth-reddyD/retrivex}
@@ -322,3 +322,7 @@ Built with inspiration from:
 - LangChain's Parent Document Retriever
 - LlamaIndex's Sentence Window and Auto-Merging retrievers
 - Research on positional bias in LLMs
+
+---
+
+**Note**: The PyPI package name is `retrivexlib` to avoid conflicts. The project is still called RetriVex.

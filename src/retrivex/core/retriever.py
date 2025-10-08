@@ -297,7 +297,7 @@ class SpanComposer:
             sorted_spans = self._deduplicate_spans(sorted_spans)
 
         # Greedy selection
-        selected = []
+        selected: List[Span] = []
         total_tokens = 0
 
         for span in sorted_spans:
@@ -311,7 +311,6 @@ class SpanComposer:
                 # Always include at least one span (trimmed if needed)
                 selected.append(span)
                 break
-
         return selected
 
     def _deduplicate_spans(self, spans: List[Span]) -> List[Span]:

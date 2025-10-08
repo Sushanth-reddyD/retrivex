@@ -8,19 +8,26 @@ version = "0.1.0"
 description = "Lightweight neighbor-expansion retriever for addressing LLM positional bias in long contexts"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
-    {name = "Sushanth Reddy", email = "your.email@example.com"}
+    {name = "Sushanth Reddy", email = "sushanthdondapati5@gmail.com"}
 ]
-keywords = ["retrieval", "rag", "llm", "vector-search", "context-window"]
+maintainers = [
+    {name = "Sushanth Reddy", email = "sushanthdondapati5@gmail.com"}
+]
+keywords = ["retrieval", "rag", "llm", "vector-search", "context-window", "positional-bias", "neighbor-expansion"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers", 
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Text Processing :: Indexing",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
 ]
 
 dependencies = [
@@ -56,6 +63,11 @@ all = [
 Homepage = "https://github.com/Sushanth-reddyD/retrivex"
 Repository = "https://github.com/Sushanth-reddyD/retrivex"
 Issues = "https://github.com/Sushanth-reddyD/retrivex/issues"
+Documentation = "https://github.com/Sushanth-reddyD/retrivex/blob/main/README.md"
+Changelog = "https://github.com/Sushanth-reddyD/retrivex/blob/main/CHANGELOG.md"
+
+[project.scripts]
+retrivex-eval = "retrivex.eval.run_evaluation:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

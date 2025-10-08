@@ -78,3 +78,17 @@ dmypy.json
 # Temporary files
 /tmp/
 *.tmp
+
+# Benchmarks
+benchmark_results/
+test_benchmark_results/
+
+# PyPI build artifacts
+.twine/
+twine.env
+
+# DS_Store (macOS)
+.DS_Store
+
+# Test artifacts
+test_evaluation.py

@@ -199,6 +199,53 @@ Each chunk needs:
 - **Improvement**: +5-15% absolute recall on adjacent-answer cases
 - **Token efficiency**: Same or better F1 at fixed token budget
 
+## Benchmark Results
+
+RetriVex has been evaluated against **LongBench**, **RULER**, and **NIAH** benchmarks with 25 samples each:
+
+### Performance Summary
+
+| Method | Avg F1 Score | Avg Recall@k | Speed vs Vanilla k-NN |
+|--------|--------------|--------------|----------------------|
+| **Vanilla k-NN** | 0.067 | 0.667 | Baseline |
+| **Simple Expansion** | 0.066 | 0.613 | 6% slower |
+| **RetriVex (Default)** | **0.073** | **0.713** | **16% faster** |
+| **RetriVex (Optimized)** | **0.074** | **0.667** | **17% faster** |
+
+### Key Findings
+
+- **🚀 Speed Improvement**: 16-50% faster than vanilla k-NN across benchmarks
+- **📈 Quality Maintenance**: Equivalent or better F1/recall scores
+- **🎯 Position Robustness**: Reduced position bias through edge-balanced ordering
+- **⚡ Token Efficiency**: Better context utilization with moderate token increase
+
+### Benchmark-Specific Results
+
+#### LongBench (Multi-task QA)
+- **Quality**: Perfect recall (1.0) and MRR (1.0) across all methods
+- **Speed**: RetriVex achieves **50% speed improvement** (0.035ms vs 0.070ms)
+- **Tokens**: 69% more tokens but significantly faster processing
+
+#### RULER (Position Sensitivity)  
+- **Challenge**: All methods struggle with F1 scoring (0.0 across board)
+- **Exact Match**: Variable performance (12-64% depending on configuration)
+- **Insight**: Synthetic benchmarks may not reflect real-world scenarios
+
+#### NIAH (Needle in Haystack)
+- **Quality**: RetriVex shows better recall (0.92 vs 0.84) and MRR (0.92 vs 0.58)
+- **Position Bias**: Significantly reduced (-0.02 vs -0.52)
+- **Consistency**: More balanced performance across document positions
+
+### Configuration Recommendations
+
+| Use Case | Configuration | Expected Benefit |
+|----------|---------------|------------------|
+| **Speed-Critical** | `window=1, budget=2000` | 50% speed improvement |
+| **Quality-Focused** | `window=3, budget=4000` | Best position handling |
+| **Balanced** | `window=2, budget=2000` | Optimal speed-quality trade-off |
+
+📊 **Detailed Results**: See [EVALUATION_REPORT.md](EVALUATION_REPORT.md) for comprehensive analysis.
+
 ## Evaluation Metrics
 
 RetriVex is designed to be evaluated on:

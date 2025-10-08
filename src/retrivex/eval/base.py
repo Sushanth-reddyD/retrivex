@@ -463,6 +463,10 @@ class BaseEvaluator(ABC):
         
         return 0.0
     
+from ..core.models import Chunk, RetrievalConfig, SeedHit, Span
+from ..core.retriever import SpanComposer
+from .metrics import compute_f1_score
+
     def _compute_em_f1(self, result: RetrievalResult, sample: EvaluationSample) -> Tuple[float, float]:
         """Compute exact match and F1 score."""
         retrieved_text = " ".join(span.text for span in result.spans)
@@ -470,22 +474,9 @@ class BaseEvaluator(ABC):
         # Simple exact match (case-insensitive)
         em = 1.0 if sample.answer.lower() in retrieved_text.lower() else 0.0
         
-        # Token-level F1
-        answer_tokens = set(sample.answer.lower().split())
-        retrieved_tokens = set(retrieved_text.lower().split())
-        
-        if not answer_tokens:
-            return em, 1.0 if not retrieved_tokens else 0.0
-        
-        intersection = answer_tokens & retrieved_tokens
-        precision = len(intersection) / len(retrieved_tokens) if retrieved_tokens else 0.0
-        recall = len(intersection) / len(answer_tokens)
-        
-        if precision + recall == 0:
-            f1 = 0.0
-        else:
-            f1 = 2 * precision * recall / (precision + recall)
-        
+        # Delegate F1 computation to the shared, Counter-based helper
+        f1 = compute_f1_score(retrieved_text, sample.answer)
+        return em, f1
         return em, f1
     
     def _get_answer_position(self, sample: EvaluationSample) -> str:

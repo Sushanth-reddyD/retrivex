@@ -136,6 +136,7 @@ class TestEndToEndRetrieval:
                 "Edge-balanced ordering should reorder spans relative to score-desc "
                 "when more than two spans are available"
             )
+
     def test_token_budget_constraint(self, sample_document):
         """Test that token budget is respected."""
         chunker = SimpleChunker(chunk_size=50, overlap=10)

@@ -182,22 +182,25 @@ def compute_f1_score(prediction: str, reference: str) -> float:
     Returns:
         F1 score (0.0 to 1.0)
     """
-    pred_tokens = set(prediction.lower().split())
-    ref_tokens = set(reference.lower().split())
-    
-    if not ref_tokens:
-        return 1.0 if not pred_tokens else 0.0
-    
-    if not pred_tokens:
+    from collections import Counter
+
+    pred_counter = Counter(prediction.lower().split())
+    ref_counter = Counter(reference.lower().split())
+
+    if not ref_counter:
+        return 1.0 if not pred_counter else 0.0
+
+    if not pred_counter:
         return 0.0
-    
-    intersection = pred_tokens & ref_tokens
-    precision = len(intersection) / len(pred_tokens)
-    recall = len(intersection) / len(ref_tokens)
-    
+
+    intersection = (pred_counter & ref_counter)
+    common = sum(intersection.values())
+    precision = common / sum(pred_counter.values())
+    recall = common / sum(ref_counter.values())
+
     if precision + recall == 0:
         return 0.0
-    
+
     return 2 * precision * recall / (precision + recall)
 
 

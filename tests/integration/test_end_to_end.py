@@ -132,8 +132,10 @@ class TestEndToEndRetrieval:
             # Edge-balanced places high-value at edges
             # Score-desc places highest first
             # They may differ in the middle
-            assert edge_order == score_order or edge_order != score_order, "Orderings checked"
-
+            assert edge_order != score_order, (
+                "Edge-balanced ordering should reorder spans relative to score-desc "
+                "when more than two spans are available"
+            )
     def test_token_budget_constraint(self, sample_document):
         """Test that token budget is respected."""
         chunker = SimpleChunker(chunk_size=50, overlap=10)

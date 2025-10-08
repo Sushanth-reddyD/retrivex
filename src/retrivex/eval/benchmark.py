@@ -39,8 +39,7 @@ class ComprehensiveBenchmark:
         verbose: bool = True
     ):
         self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(exist_ok=True)
-        
+        self.output_dir.mkdir(parents=True, exist_ok=True)
         self.max_samples_per_benchmark = max_samples_per_benchmark
         self.include_baselines = include_baselines
         self.verbose = verbose
